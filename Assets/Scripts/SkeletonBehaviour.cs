@@ -32,10 +32,11 @@ public class SkeletonBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (followingPlayer_ == true)
+        if (followingPlayer_)
         {
             Chase();
         }
+        animator_.SetFloat("Speed", rigidBody.velocity.sqrMagnitude);
     }
 
     private void FixedUpdate()

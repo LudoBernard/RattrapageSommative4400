@@ -335,6 +335,7 @@ public class CellularAutomata : MonoBehaviour
                 if (aliveNeighbor)
                 {
                     cellViews[x, y].gameObject.AddComponent<BoxCollider2D>();
+                    cellViews[x, y].gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
                 }
             }
         }

@@ -2,124 +2,89 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCharacter : MonoBehaviour
 {
-    private enum State
-    {
-        NONE,
-        Idle,
-        Walk,
-        Attack
-    }
     [SerializeField] private Animator animator_;
-    [SerializeField] private Transform playerSprite;
-    [SerializeField] private AudioClip walkFx;
-    [SerializeField] private AudioClip attackFx;
-    [SerializeField] private Rigidbody2D body;
-
-    private const float Speed = 5.0f;
-    private State currentState_;
-    private bool isFacingRight_ = false;
-    private float deadZone_ = 0.1f;
-    private Vector2 movement_;
+    [SerializeField] private Rigidbody2D body_;
+    [SerializeField] private GameObject bulletPrefab_;
+    [SerializeField] private Transform firePoint_;
+    [SerializeField] private float bulletForce = 10f;
+    [SerializeField] private int ammo_ = 5;
+    [SerializeField] private float ammoRechargeTime_ = 1f;
+    private Text text_;
     
+    private Camera cam;
+    private const float Speed = 4.0f;
+    private Vector2 movement_;
+    private Vector2 mousePos_;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        body.GetComponent<Rigidbody2D>();
-        currentState_ = State.Idle;
+        body_.GetComponent<Rigidbody2D>();
+        cam = Camera.main;
+        text_ = FindObjectOfType<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        text_.text = "Ammo: " + ammo_;
         movement_.x = Input.GetAxis("Horizontal");
-        movement_.y = Input.GetAxis("Vertical");
+        movement_.y = Input.GetAxis("Vertical"); 
+        mousePos_ = cam.ScreenToWorldPoint(Input.mousePosition);
+        
+        Vector2 lookDir = mousePos_ - body_.position;
+        
+        animator_.SetFloat("Horizontal", movement_.x);
+        animator_.SetFloat("Vertical", movement_.y);
+        animator_.SetFloat("Speed", movement_.sqrMagnitude);
+        animator_.SetFloat("MousePosX", lookDir.x);
+        animator_.SetFloat("MousePosY", lookDir.y);
+
+        if (ammoRechargeTime_ > 0)
+        {
+            ammoRechargeTime_ -= Time.deltaTime;
+        }
+        else
+        {
+            if (ammo_ < 5)
+            {
+                ammo_ += 1;
+            }
+
+            ammoRechargeTime_ = 1;
+        }
+        
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (ammo_ != 0)
+            {
+                Shoot();
+                ammo_ -= 1;
+            }
+        }
+
+        
+    }
+
+    private void Shoot()
+    {
+        animator_.Play("PlayerShooting");
+        Vector2 lookDir = mousePos_ - body_.position;
+        GameObject bullet = Instantiate(bulletPrefab_, firePoint_.position, firePoint_.rotation);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.AddForce(lookDir.normalized * bulletForce, ForceMode2D.Impulse);
     }
 
     private void FixedUpdate()
     {
-        body.MovePosition(body.position + movement_ * Speed * Time.deltaTime);
-
-        if (Input.GetAxis("Horizontal") > deadZone_ && isFacingRight_)
-        {
-            Flip();
-        }
-
-        if (Input.GetAxis("Horizontal") < -deadZone_ && !isFacingRight_)
-        {
-            Flip();
-        }
-
-        switch (currentState_)
-        {
-            case State.Idle:
-                if (Mathf.Abs(Input.GetAxis("Horizontal")) > deadZone_)
-                {
-                    ChangeState(State.Walk);
-                }
-                
-                if (Mathf.Abs(Input.GetAxis("Vertical")) > deadZone_)
-                {
-                    ChangeState(State.Walk);
-                }
-
-                if (Input.GetKey(KeyCode.Space))
-                {
-                    ChangeState(State.Attack);
-                    break;
-                }
-                break;
-            case State.Walk:
-                if ((Input.GetAxis("Vertical") > -deadZone_ && Input.GetAxis("Vertical") < deadZone_)
-                    && Input.GetAxis("Horizontal") > -deadZone_ && Input.GetAxis("Horizontal")< deadZone_)
-                {
-                    ChangeState(State.Idle);
-                }
-
-                if (Input.GetKey(KeyCode.Space))
-                {
-                    ChangeState(State.Attack);
-                }
-                break;
-            case State.Attack:
-                
-                if (Mathf.Abs(Input.GetAxis("Horizontal")) > deadZone_)
-                {
-                    ChangeState(State.Walk);
-                }
-                break;
-        }
-    }
-
-    private void Flip()
-    {
-        Vector3 newScale = playerSprite.transform.localScale;
-        newScale.x *= -1;
-        playerSprite.transform.localScale = newScale;
-        isFacingRight_ = !isFacingRight_;
-    }
-
-    private void ChangeState(State state)
-    {
-        switch (state)
-        {
-            case State.Idle:
-                animator_.Play("Idle1");
-                break;
-            case State.Walk:
-                animator_.Play("Walk");
-                break;
-            case State.Attack:
-                animator_.Play("Attack");
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(state), state, null);  
-        }
-
-        currentState_ = state;
+        body_.MovePosition(body_.position + movement_ * Speed * Time.deltaTime);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
