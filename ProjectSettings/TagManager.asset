@@ -8,6 +8,7 @@ TagManager:
   - Slime
   - Objectif
   - Bullet
+  - Cell
   layers:
   - Default
   - TransparentFX
