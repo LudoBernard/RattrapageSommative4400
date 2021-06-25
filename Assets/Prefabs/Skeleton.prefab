@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: -1896768042063851871}
   - component: {fileID: 6929764447695391327}
   - component: {fileID: -1327669449446843512}
-  - component: {fileID: 3320132099954345410}
   - component: {fileID: -203226299683249513}
   - component: {fileID: -3514029288358249536}
+  - component: {fileID: -8304340930460417954}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Skeleton
@@ -167,24 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4541db1e9382494390ac73769d70eb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed_: 2
   healPoints: 8
---- !u!58 &3320132099954345410
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6770300500577629888}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 5
 --- !u!114 &-203226299683249513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,24 +211,38 @@ MonoBehaviour:
   version: 2
   radius: 0.5
   height: 2
-  repathRate: 0.5
+  repathRate: 0.1
   canSearch: 1
   canMove: 1
-  maxSpeed: 1
+  maxSpeed: 3
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
   centerOffsetCompatibility: NaN
   orientation: 1
-  enableRotation: 1
+  enableRotation: 0
   targetCompatibility: {fileID: 0}
   maxAcceleration: -2.5
   rotationSpeed: 360
   slowdownDistance: 0.6
-  pickNextWaypointDist: 2
+  pickNextWaypointDist: 1.2
   endReachedDistance: 0.2
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
   constrainInsideGraph: 0
+--- !u!114 &-8304340930460417954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6770300500577629888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9679e68a0f1144e79c664d9a11ca121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  target: {fileID: 8496009395787414440, guid: 0b7126fa4359af1449aec27130b26e2e, type: 3}

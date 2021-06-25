@@ -8,9 +8,15 @@ public class SkeletonBehaviour : MonoBehaviour
     private bool followingPlayer_ = false;
     private Animator animator_;
     private GameObject player_;
-    [SerializeField] private float moveSpeed_ = 5.0f;
     [SerializeField] private float healPoints = 8.0f;
     private Rigidbody2D rigidBody;
+    
+
+    private void Start()
+    {
+        animator_ = gameObject.GetComponent<Animator>();
+        rigidBody = GetComponent<Rigidbody2D>();
+    }
 
     // Update is called once per frame
     void Update()

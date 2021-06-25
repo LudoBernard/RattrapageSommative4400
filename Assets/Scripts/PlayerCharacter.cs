@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerCharacter : MonoBehaviour
@@ -92,6 +93,11 @@ public class PlayerCharacter : MonoBehaviour
         if (other.gameObject.CompareTag("Objectif"))
         {
             FindObjectOfType<GameManager>().Winnig();
+        }
+
+        if (other.gameObject.CompareTag("Slime") || other.gameObject.CompareTag("Skeleton"))
+        {
+            SceneManager.LoadScene("LudoScene");
         }
     }
 }

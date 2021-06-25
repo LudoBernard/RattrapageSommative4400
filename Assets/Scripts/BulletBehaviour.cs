@@ -17,7 +17,8 @@ public class BulletBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Cell") ||
             other.gameObject.CompareTag("Skeleton") ||
-            other.gameObject.CompareTag("Slime"))
+            other.gameObject.CompareTag("Slime") || 
+            other.gameObject.CompareTag("Objectif"))
         {
             Destroy(gameObject);
         }

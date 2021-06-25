@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -16,6 +17,12 @@ namespace Pathfinding {
 	public class AIDestinationSetter : VersionedMonoBehaviour {
 		/// <summary>The object that the AI should move to</summary>
 		public Transform target;
+
+		private void Start()
+		{
+			target = GameObject.FindWithTag("Player").transform;
+		}
+
 		IAstarAI ai;
 
 		void OnEnable () {
