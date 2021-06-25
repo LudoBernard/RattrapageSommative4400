@@ -401,6 +401,7 @@ public class CellularAutomata : MonoBehaviour
                 {
                     cells[x, y] = new Cell(false);
                     cellViews[x, y].IsAlive = false;
+                    cellViews[x, y].gameObject.layer = 8;
                 }
                 //Enough living space means living
                 else if (!isAlive && aliveNeighborCount > deathToAliveConversion)
