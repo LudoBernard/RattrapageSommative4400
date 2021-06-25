@@ -20,7 +20,6 @@ public class BulletBehaviour : MonoBehaviour
             other.gameObject.CompareTag("Slime"))
         {
             Destroy(gameObject);
-            Destroy(other.gameObject);
         }
     }
 }
