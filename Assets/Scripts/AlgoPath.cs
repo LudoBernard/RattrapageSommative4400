@@ -33,7 +33,6 @@ namespace path
         
     }
 
-
     
     /**
      * <summary>Bidirectional graph</summary> 
